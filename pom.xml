@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.13</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>kr.sprouts.autoconfigure</groupId>
+	<artifactId>sprouts-security-credential-consumer-spring-boot-starter</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>sprouts-security-credential-consumer-spring-boot-starter</name>
+	<properties>
+		<java.version>11</java.version>
+		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+	</properties>
+	<repositories>
+		<!-- personal repository -->
+		<repository>
+			<id>nexus3-maven-public</id>
+			<url>https://nexus.sprouts.kr/repository/maven/</url>
+		</repository>
+	</repositories>
+	<dependencies>
+		<!-- auto configuration -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- logging -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j2.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-to-slf4j</artifactId>
+			<version>${log4j2.version}</version>
+		</dependency>
+
+		<!-- sprouts.kr -->
+		<dependency>
+			<groupId>kr.sprouts.security.credential</groupId>
+			<artifactId>sprouts-security-credential</artifactId>
+			<version>0.0.2</version>
+		</dependency>
+
+		<!-- lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.4.0</version>
+				<executions>
+					<execution>
+						<id>parse-version</id>
+						<goals>
+							<goal>parse-version</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.16.0</version>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>gitlab-package-registry-deploy</id>
+			<distributionManagement>
+				<repository>
+					<id>gitlab-package-registry</id>
+					<!--suppress UnresolvedMavenProperty -->
+					<url>${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/maven/</url>
+				</repository>
+				<snapshotRepository>
+					<id>gitlab-package-registry</id>
+					<!--suppress UnresolvedMavenProperty -->
+					<url>${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/maven/</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>snapshot-patch</id>
+			<activation>
+				<property>
+					<name>snapshotPatch</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>versions-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>set</goal>
+								</goals>
+								<phase>validate</phase>
+								<configuration>
+									<newVersion>
+										<!--suppress UnresolvedMavenProperty -->
+										${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextIncrementalVersion}-SNAPSHOT
+									</newVersion>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>release-patch</id>
+			<activation>
+				<property>
+					<name>releasePatch</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>versions-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>set</goal>
+								</goals>
+								<phase>validate</phase>
+								<configuration>
+									<newVersion>
+										<!--suppress UnresolvedMavenProperty -->
+										${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
+									</newVersion>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>
