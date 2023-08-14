@@ -60,7 +60,7 @@ public class ApiKeyCredentialConsumer implements CredentialConsumer<ApiKeySubjec
         try {
             Principal<ApiKeySubject> principal = objectMapper.readValue(cipher.decryptToString(codec.decode(credential.getValue()), decryptSecret), new TypeReference<>() {});
 
-            if (!isValidProvider(principal.getProviderId())) throw new InvalidCredentialProviderException();
+            if (Boolean.FALSE.equals(isValidProvider(principal.getProviderId()))) throw new InvalidCredentialProviderException();
 
             return principal;
         } catch (JsonProcessingException e) {

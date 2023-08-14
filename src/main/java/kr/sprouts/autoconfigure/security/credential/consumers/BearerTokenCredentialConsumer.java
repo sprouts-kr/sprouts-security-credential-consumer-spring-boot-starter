@@ -62,7 +62,7 @@ public class BearerTokenCredentialConsumer implements CredentialConsumer<BearerT
         try {
             Principal<BearerTokenSubject> principal = principal(jwt.parseClaimsJws(credential.getValue(), decryptSecret));
 
-            if (!isValidProvider(principal.getProviderId())) throw new InvalidCredentialProviderException();
+            if (Boolean.FALSE.equals(isValidProvider(principal.getProviderId()))) throw new InvalidCredentialProviderException();
 
             return principal;
         } catch (JsonProcessingException e) {
