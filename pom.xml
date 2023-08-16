@@ -57,7 +57,7 @@
 		<dependency>
 			<groupId>kr.sprouts.security.credential</groupId>
 			<artifactId>sprouts-security-credential</artifactId>
-			<version>0.0.2</version>
+			<version>0.0.3</version>
 		</dependency>
 
 		<!-- lombok -->
