@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 @Component
 public class CredentialConsumerManager {
-    Logger log = Logger.getLogger(this.getClass().getSimpleName());
+    Logger log = Logger.getLogger(CredentialConsumerManager.class.getCanonicalName());
     private final Map<UUID, CredentialConsumer<?>> credentialConsumers;
 
     public CredentialConsumerManager(CredentialConsumerConfigurationProperty credentialConsumerConfigurationProperty) {
@@ -38,9 +38,7 @@ public class CredentialConsumerManager {
                     throw new UnsupportedCredentialConsumerException();
             }
 
-            if (log.isLoggable(Level.INFO)) {
-                log.info(String.format("Initialized credential consumer. Id: %s, Name: %s", credentialConsumerSpec.getId(), credentialConsumerSpec.getName()));
-            }
+            if (log.isLoggable(Level.INFO)) log.info(String.format("Initialized credential consumer. Id: %s, Name: %s", credentialConsumerSpec.getId(), credentialConsumerSpec.getName()));
         }
     }
 

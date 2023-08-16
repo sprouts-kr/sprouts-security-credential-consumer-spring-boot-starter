@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 @ComponentScan(basePackageClasses = { CredentialConsumerManager.class })
 @EnableConfigurationProperties(value = { CredentialConsumerConfigurationProperty.class })
 public class CredentialConsumerConfiguration {
-    private final Logger log = Logger.getLogger(this.getClass().getSimpleName());
+    private final Logger log = Logger.getLogger(CredentialConsumerConfiguration.class.getCanonicalName());
 
     @Getter
     private final CredentialConsumerConfigurationProperty credentialConsumerConfigurationProperty;
@@ -22,8 +22,6 @@ public class CredentialConsumerConfiguration {
     public CredentialConsumerConfiguration(CredentialConsumerConfigurationProperty credentialConsumerConfigurationProperty) {
         this.credentialConsumerConfigurationProperty = credentialConsumerConfigurationProperty;
 
-        if (log.isLoggable(Level.INFO)) {
-            log.info(String.format("Initialize %s", this.getClass().getSimpleName()));
-        }
+        if (log.isLoggable(Level.INFO)) log.info("Initialized CredentialConsumerConfiguration");
     }
 }

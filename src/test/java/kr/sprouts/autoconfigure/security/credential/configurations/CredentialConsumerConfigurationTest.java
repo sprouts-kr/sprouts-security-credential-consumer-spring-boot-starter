@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CredentialConsumerConfigurationTest {
-    Logger log = Logger.getLogger(this.getClass().getSimpleName());
+    Logger log = Logger.getLogger(CredentialConsumerConfigurationTest.class.getCanonicalName());
     private final ApplicationContextRunner applicationContextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(
                     CredentialConsumerConfiguration.class,
@@ -159,11 +159,8 @@ class CredentialConsumerConfigurationTest {
 
                 if (provider instanceof ApiKeyCredentialProvider) {
                     credential = ((ApiKeyCredentialProvider) provider).provide(ApiKeySubject.of(memberId));
-
-                    log.info(credential.getValue());
                 } else if (provider instanceof BearerTokenCredentialProvider) {
                     credential = ((BearerTokenCredentialProvider) provider).provide(BearerTokenSubject.of(memberId, validityInMinutes));
-                    log.info(credential.getValue());
                 }
 
                 assertNotNull(credential);
