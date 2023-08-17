@@ -83,11 +83,11 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- sprouts.kr -->
+		<!-- sprouts.kr (for test) -->
 		<dependency>
 			<groupId>kr.sprouts.autoconfigure</groupId>
 			<artifactId>sprouts-security-credential-provider-spring-boot-starter</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
