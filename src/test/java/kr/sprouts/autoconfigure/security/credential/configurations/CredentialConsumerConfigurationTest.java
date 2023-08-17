@@ -10,6 +10,7 @@ import kr.sprouts.autoconfigure.security.credential.providers.CredentialProvider
 import kr.sprouts.security.credential.Credential;
 import kr.sprouts.security.credential.CredentialConsumer;
 import kr.sprouts.security.credential.CredentialConsumerSpec;
+import kr.sprouts.security.credential.CredentialHeaderSpec;
 import kr.sprouts.security.credential.CredentialProvider;
 import kr.sprouts.security.credential.Principal;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CredentialConsumerConfigurationTest {
-    Logger log = Logger.getLogger(this.getClass().getSimpleName());
+    Logger log = Logger.getLogger(CredentialConsumerConfigurationTest.class.getCanonicalName());
     private final ApplicationContextRunner applicationContextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(
                     CredentialConsumerConfiguration.class,
@@ -33,6 +34,10 @@ class CredentialConsumerConfigurationTest {
     @Test
     void configuration() {
         String[] properties = {
+                "sprouts.security.credential.header.provider-header-name=Authorization-Provider",
+                "sprouts.security.credential.header.consumer-header-name=Authorization-Consumer",
+                "sprouts.security.credential.header.value-header-name=Authorization",
+
                 "sprouts.security.credential.providers[0].id=98c73526-7b15-4e0c-aacd-a47816efaedc",
                 "sprouts.security.credential.providers[0].name=Provider #1",
                 "sprouts.security.credential.providers[0].type=API_KEY",
@@ -61,6 +66,10 @@ class CredentialConsumerConfigurationTest {
     @Test
     void property() {
         String[] properties = {
+                "sprouts.security.credential.header.provider-header-name=Authorization-Provider",
+                "sprouts.security.credential.header.consumer-header-name=Authorization-Consumer",
+                "sprouts.security.credential.header.value-header-name=Authorization",
+
                 "sprouts.security.credential.providers[0].id=98c73526-7b15-4e0c-aacd-a47816efaedc",
                 "sprouts.security.credential.providers[0].name=Provider #1",
                 "sprouts.security.credential.providers[0].type=API_KEY",
@@ -89,12 +98,24 @@ class CredentialConsumerConfigurationTest {
                     .orElseThrow();
 
             assertEquals("bcb7f865-319b-4668-9fca-4ea4440822e2", consumerSpec.getId());
+
+            CredentialHeaderSpec headerSpec = context.getBean(CredentialConsumerConfiguration.class)
+                    .getCredentialConsumerConfigurationProperty()
+                    .getHeader();
+
+            assertEquals("Authorization-Provider", headerSpec.getProviderHeaderName());
+            assertEquals("Authorization-Consumer", headerSpec.getConsumerHeaderName());
+            assertEquals("Authorization", headerSpec.getValueHeaderName());
         });
     }
 
     @Test
     void provideAndConsume() {
         String[] properties = {
+                "sprouts.security.credential.header.provider-header-name=Authorization-Provider",
+                "sprouts.security.credential.header.consumer-header-name=Authorization-Consumer",
+                "sprouts.security.credential.header.value-header-name=Authorization",
+
                 "sprouts.security.credential.providers[0].id=98c73526-7b15-4e0c-aacd-a47816efaedc",
                 "sprouts.security.credential.providers[0].name=Provider #1",
                 "sprouts.security.credential.providers[0].type=API_KEY",
@@ -159,11 +180,8 @@ class CredentialConsumerConfigurationTest {
 
                 if (provider instanceof ApiKeyCredentialProvider) {
                     credential = ((ApiKeyCredentialProvider) provider).provide(ApiKeySubject.of(memberId));
-
-                    log.info(credential.getValue());
                 } else if (provider instanceof BearerTokenCredentialProvider) {
                     credential = ((BearerTokenCredentialProvider) provider).provide(BearerTokenSubject.of(memberId, validityInMinutes));
-                    log.info(credential.getValue());
                 }
 
                 assertNotNull(credential);
