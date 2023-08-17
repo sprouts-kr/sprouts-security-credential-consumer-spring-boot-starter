@@ -21,6 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsUtils;
 
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,50 +63,26 @@ public class SecurityWebConfiguration {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions().sameOrigin())
-                .sessionManagement(filter -> filter.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(filter -> filter.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        Optional<String[]> permitAllPatterns = Optional.of(securityHttpPermitProperty.getPermitAll().toArray());
+        Optional<String[]> permitGetPatterns = Optional.of(securityHttpPermitProperty.getPermitGet().toArray());
+        Optional<String[]> permitPostPatterns = Optional.of(securityHttpPermitProperty.getPermitPost().toArray());
+        Optional<String[]> permitPutPatterns = Optional.of(securityHttpPermitProperty.getPermitPut().toArray());
+        Optional<String[]> permitPatchPatterns = Optional.of(securityHttpPermitProperty.getPermitPatch().toArray());
+        Optional<String[]> permitDeletePatterns = Optional.of(securityHttpPermitProperty.getPermitDelete().toArray());
+
+        httpSecurity
                 .addFilterBefore(new CredentialConsumeFilter(credentialConsumerConfigurationProperty, credentialConsumerManager), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests(customizer -> {
-                    if (securityHttpPermitProperty.getPermitAll() != null
-                            && securityHttpPermitProperty.getPermitAll().getPatterns() != null) {
-                        customizer.antMatchers(
-                                securityHttpPermitProperty.getPermitAll().toArray()
-                        ).permitAll();
-                    }
-                    if (securityHttpPermitProperty.getPermitGet() != null
-                            && securityHttpPermitProperty.getPermitGet().getPatterns() != null) {
-                        customizer.antMatchers(
-                                HttpMethod.GET,
-                                securityHttpPermitProperty.getPermitGet().toArray()
-                        ).permitAll();
-                    }
-                    if (securityHttpPermitProperty.getPermitPost() != null
-                            && securityHttpPermitProperty.getPermitPost().getPatterns() != null) {
-                        customizer.antMatchers(
-                                HttpMethod.POST,
-                                securityHttpPermitProperty.getPermitPost().toArray()
-                        ).permitAll();
-                    }
-                    if (securityHttpPermitProperty.getPermitPut() != null
-                            && securityHttpPermitProperty.getPermitPut().getPatterns() != null) {
-                        customizer.antMatchers(
-                                HttpMethod.PUT,
-                                securityHttpPermitProperty.getPermitPut().toArray()
-                        ).permitAll();
-                    }
-                    if (securityHttpPermitProperty.getPermitPatch() != null
-                            && securityHttpPermitProperty.getPermitPatch().getPatterns() != null) {
-                        customizer.antMatchers(
-                                HttpMethod.PATCH,
-                                securityHttpPermitProperty.getPermitPatch().toArray()
-                        ).permitAll();
-                    }
-                    if (securityHttpPermitProperty.getPermitDelete() != null
-                            && securityHttpPermitProperty.getPermitDelete().getPatterns() != null) {
-                        customizer.antMatchers(
-                                HttpMethod.DELETE,
-                                securityHttpPermitProperty.getPermitDelete().toArray()
-                        ).permitAll();
-                    }
+
+                    permitAllPatterns.ifPresent(patterns -> customizer.antMatchers(patterns).permitAll());
+                    permitGetPatterns.ifPresent(patterns -> customizer.antMatchers(HttpMethod.GET, patterns).permitAll());
+                    permitPostPatterns.ifPresent(patterns -> customizer.antMatchers(HttpMethod.POST, patterns).permitAll());
+                    permitPutPatterns.ifPresent(patterns -> customizer.antMatchers(HttpMethod.PUT, patterns).permitAll());
+                    permitPatchPatterns.ifPresent(patterns -> customizer.antMatchers(HttpMethod.PATCH, patterns).permitAll());
+                    permitDeletePatterns.ifPresent(patterns -> customizer.antMatchers(HttpMethod.DELETE, patterns).permitAll());
+
                     customizer.requestMatchers(CorsUtils::isPreFlightRequest).permitAll();
                     customizer.anyRequest().authenticated();
                 });

@@ -99,7 +99,8 @@ public class CredentialConsumeFilter extends OncePerRequestFilter {
 
             for (UUID targetConsumer: credential.getConsumerIds()) {
                 credentialConsumerManager.get(targetConsumer).ifPresent(consumer::set);
-                break;
+
+                if (consumer.get() != null) break;
             }
 
             if (consumer.get() == null) {
@@ -107,7 +108,7 @@ public class CredentialConsumeFilter extends OncePerRequestFilter {
             }
 
             return ConsumeResult.succeeded(consumer.get().consume(credential), credential);
-        } catch (Throwable e) {
+        } catch (RuntimeException e) {
             return ConsumeResult.failed();
         }
     }
