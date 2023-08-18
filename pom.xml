@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>kr.sprouts.autoconfigure</groupId>
 	<artifactId>sprouts-security-credential-consumer-spring-boot-starter</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>sprouts-security-credential-consumer-spring-boot-starter</name>
 	<properties>
 		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
