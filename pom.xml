@@ -13,8 +13,15 @@
 	<version>0.0.2-SNAPSHOT</version>
 	<name>sprouts-security-credential-consumer-spring-boot-starter</name>
 	<properties>
-		<java.version>11</java.version>
 		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+		<java.version>11</java.version>
+		<!-- dependency -->
+		<sprouts.security.credential.version>0.0.3</sprouts.security.credential.version>
+		<!-- plugin -->
+		<build.helper.maven.plugin.version>3.4.0</build.helper.maven.plugin.version>
+		<versions.maven.plugin.version>2.16.0</versions.maven.plugin.version>
+		<!-- test -->
+		<sprouts.security.credential.provider.version>0.0.1</sprouts.security.credential.provider.version>
 	</properties>
 	<repositories>
 		<!-- personal repository -->
@@ -32,7 +39,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-autoconfigure-processor</artifactId>
-			<optional>true</optional>
 		</dependency>
 		<!-- web -->
 		<dependency>
@@ -48,12 +54,10 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
-			<version>${log4j2.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-to-slf4j</artifactId>
-			<version>${log4j2.version}</version>
 		</dependency>
 		<!-- string utils -->
 		<dependency>
@@ -65,7 +69,7 @@
 		<dependency>
 			<groupId>kr.sprouts.security.credential</groupId>
 			<artifactId>sprouts-security-credential</artifactId>
-			<version>0.0.3</version>
+			<version>${sprouts.security.credential.version}</version>
 		</dependency>
 
 		<!-- lombok -->
@@ -87,7 +91,7 @@
 		<dependency>
 			<groupId>kr.sprouts.autoconfigure</groupId>
 			<artifactId>sprouts-security-credential-provider-spring-boot-starter</artifactId>
-			<version>0.0.1</version>
+			<version>${sprouts.security.credential.provider.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -104,7 +108,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>3.4.0</version>
+				<version>${build.helper.maven.plugin.version}</version>
 				<executions>
 					<execution>
 						<id>parse-version</id>
@@ -117,7 +121,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>versions-maven-plugin</artifactId>
-				<version>2.16.0</version>
+				<version>${versions.maven.plugin.version}</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -149,6 +153,7 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>versions-maven-plugin</artifactId>
+						<version>${versions.maven.plugin.version}</version>
 						<executions>
 							<execution>
 								<goals>
@@ -179,6 +184,7 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>versions-maven-plugin</artifactId>
+						<version>${versions.maven.plugin.version}</version>
 						<executions>
 							<execution>
 								<goals>
