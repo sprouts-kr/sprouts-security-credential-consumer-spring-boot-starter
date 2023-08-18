@@ -3,6 +3,7 @@ package kr.sprouts.autoconfigure.security.credential.consumers;
 import kr.sprouts.autoconfigure.security.credential.properties.CredentialConsumerConfigurationProperty;
 import kr.sprouts.security.credential.CredentialConsumer;
 import kr.sprouts.security.credential.CredentialConsumerSpec;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -10,12 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Component
+@Slf4j
 public class CredentialConsumerManager {
-    Logger log = Logger.getLogger(CredentialConsumerManager.class.getCanonicalName());
     private final Map<UUID, CredentialConsumer<?>> credentialConsumers;
 
     public CredentialConsumerManager(CredentialConsumerConfigurationProperty credentialConsumerConfigurationProperty) {
@@ -38,7 +37,7 @@ public class CredentialConsumerManager {
                     throw new UnsupportedCredentialConsumerException();
             }
 
-            if (log.isLoggable(Level.INFO)) log.info(String.format("Initialized credential consumer. Id: %s, Name: %s", credentialConsumerSpec.getId(), credentialConsumerSpec.getName()));
+            if (log.isInfoEnabled()) log.info("Initialized credential consumer. Id: {}, Name: {}", credentialConsumerSpec.getId(), credentialConsumerSpec.getName());
         }
     }
 

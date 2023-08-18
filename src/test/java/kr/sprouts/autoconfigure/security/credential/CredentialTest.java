@@ -13,6 +13,7 @@ import kr.sprouts.autoconfigure.security.web.configurations.SecurityWebConfigura
 import kr.sprouts.security.credential.Credential;
 import kr.sprouts.security.credential.CredentialHeaderSpec;
 import kr.sprouts.security.credential.CredentialProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,7 +27,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import java.util.UUID;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -40,11 +40,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         SecurityWebConfiguration.class,
         CredentialTestController.class
 })
+@Slf4j
 class CredentialTest {
-    private Logger log = Logger.getLogger(CredentialTest.class.getCanonicalName());
-
     private static final String SEPARATOR_CHARS = ",";
-
     private static final String BODY = "credential";
 
     @MockBean(name = "mvcHandlerMappingIntrospector")
