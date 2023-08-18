@@ -4,6 +4,7 @@ import kr.sprouts.autoconfigure.security.credential.configurations.CredentialCon
 import kr.sprouts.autoconfigure.security.credential.consumers.CredentialConsumerManager;
 import kr.sprouts.autoconfigure.security.credential.properties.CredentialConsumerConfigurationProperty;
 import kr.sprouts.autoconfigure.security.web.filer.CredentialConsumeFilter;
+import kr.sprouts.autoconfigure.security.web.properties.PatternMatcher;
 import kr.sprouts.autoconfigure.security.web.properties.SecurityHttpPermitProperty;
 import kr.sprouts.autoconfigure.security.web.properties.SecurityWebIgnoreProperty;
 import lombok.Getter;
@@ -65,23 +66,22 @@ public class SecurityWebConfiguration {
                 .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions().sameOrigin())
                 .sessionManagement(filter -> filter.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        Optional<String[]> permitAllPatterns = Optional.of(securityHttpPermitProperty.getPermitAll().toArray());
-        Optional<String[]> permitGetPatterns = Optional.of(securityHttpPermitProperty.getPermitGet().toArray());
-        Optional<String[]> permitPostPatterns = Optional.of(securityHttpPermitProperty.getPermitPost().toArray());
-        Optional<String[]> permitPutPatterns = Optional.of(securityHttpPermitProperty.getPermitPut().toArray());
-        Optional<String[]> permitPatchPatterns = Optional.of(securityHttpPermitProperty.getPermitPatch().toArray());
-        Optional<String[]> permitDeletePatterns = Optional.of(securityHttpPermitProperty.getPermitDelete().toArray());
+        Optional<PatternMatcher> permitAll = Optional.ofNullable(securityHttpPermitProperty.getPermitAll());
+        Optional<PatternMatcher> permitGet = Optional.ofNullable(securityHttpPermitProperty.getPermitGet());
+        Optional<PatternMatcher> permitPost = Optional.ofNullable(securityHttpPermitProperty.getPermitPost());
+        Optional<PatternMatcher> permitPut = Optional.ofNullable(securityHttpPermitProperty.getPermitPut());
+        Optional<PatternMatcher> permitPatch = Optional.ofNullable(securityHttpPermitProperty.getPermitPatch());
+        Optional<PatternMatcher> permitDelete = Optional.ofNullable(securityHttpPermitProperty.getPermitDelete());
 
         httpSecurity
                 .addFilterBefore(new CredentialConsumeFilter(credentialConsumerConfigurationProperty, credentialConsumerManager), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests(customizer -> {
-
-                    permitAllPatterns.ifPresent(patterns -> customizer.antMatchers(patterns).permitAll());
-                    permitGetPatterns.ifPresent(patterns -> customizer.antMatchers(HttpMethod.GET, patterns).permitAll());
-                    permitPostPatterns.ifPresent(patterns -> customizer.antMatchers(HttpMethod.POST, patterns).permitAll());
-                    permitPutPatterns.ifPresent(patterns -> customizer.antMatchers(HttpMethod.PUT, patterns).permitAll());
-                    permitPatchPatterns.ifPresent(patterns -> customizer.antMatchers(HttpMethod.PATCH, patterns).permitAll());
-                    permitDeletePatterns.ifPresent(patterns -> customizer.antMatchers(HttpMethod.DELETE, patterns).permitAll());
+                    permitAll.ifPresent(patternMatcher -> customizer.antMatchers(patternMatcher.toArray()).permitAll());
+                    permitGet.ifPresent(patternMatcher -> customizer.antMatchers(HttpMethod.GET, patternMatcher.toArray()).permitAll());
+                    permitPost.ifPresent(patternMatcher -> customizer.antMatchers(HttpMethod.POST, patternMatcher.toArray()).permitAll());
+                    permitPut.ifPresent(patternMatcher -> customizer.antMatchers(HttpMethod.PUT, patternMatcher.toArray()).permitAll());
+                    permitPatch.ifPresent(patternMatcher -> customizer.antMatchers(HttpMethod.PATCH, patternMatcher.toArray()).permitAll());
+                    permitDelete.ifPresent(patternMatcher -> customizer.antMatchers(HttpMethod.DELETE, patternMatcher.toArray()).permitAll());
 
                     customizer.requestMatchers(CorsUtils::isPreFlightRequest).permitAll();
                     customizer.anyRequest().authenticated();
@@ -96,13 +96,10 @@ public class SecurityWebConfiguration {
     public WebSecurityCustomizer webSecurityCustomizer() {
         if (securityWebIgnoreProperty == null) throw new InitializeWebSecurityCustomizerException();
 
-        WebSecurityCustomizer webSecurityCustomizer = (customizer -> {
-            if (securityWebIgnoreProperty.getIgnore() != null) {
-                customizer.ignoring().antMatchers(
-                        securityWebIgnoreProperty.getIgnore().toArray()
-                );
-            }
-        });
+        Optional<PatternMatcher> ignore = Optional.ofNullable(securityWebIgnoreProperty.getIgnore());
+
+        WebSecurityCustomizer webSecurityCustomizer =
+                (customizer -> ignore.ifPresent(patternMatcher -> customizer.ignoring().antMatchers(patternMatcher.toArray())));
 
         if (log.isLoggable(Level.INFO)) log.info("Created bean WebSecurityCustomizer");
 

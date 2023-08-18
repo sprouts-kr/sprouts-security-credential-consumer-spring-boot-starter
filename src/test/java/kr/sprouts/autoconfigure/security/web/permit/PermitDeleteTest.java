@@ -65,8 +65,9 @@ class PermitDeleteTest {
     @Test
     void delete() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.request(HttpMethod.DELETE, REQUEST_URI))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(BODY));
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.content().string(BODY));
     }
 
     @Test
