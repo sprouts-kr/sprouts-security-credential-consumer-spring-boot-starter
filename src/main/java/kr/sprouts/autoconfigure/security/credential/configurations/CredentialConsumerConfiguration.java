@@ -19,6 +19,6 @@ public class CredentialConsumerConfiguration {
     public CredentialConsumerConfiguration(CredentialConsumerConfigurationProperty credentialConsumerConfigurationProperty) {
         this.credentialConsumerConfigurationProperty = credentialConsumerConfigurationProperty;
 
-        if (log.isInfoEnabled()) log.info("Initialized CredentialConsumerConfiguration");
+        if (log.isInfoEnabled()) log.info("Initialized {}", CredentialConsumerConfiguration.class.getSimpleName());
     }
 }
