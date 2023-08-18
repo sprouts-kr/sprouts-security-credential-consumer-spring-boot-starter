@@ -8,6 +8,7 @@ import kr.sprouts.autoconfigure.security.web.properties.PatternMatcher;
 import kr.sprouts.autoconfigure.security.web.properties.SecurityHttpPermitProperty;
 import kr.sprouts.autoconfigure.security.web.properties.SecurityWebIgnoreProperty;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +24,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsUtils;
 
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @AutoConfigureAfter(value = {
         CredentialConsumerConfiguration.class
@@ -34,16 +33,12 @@ import java.util.logging.Logger;
         SecurityHttpPermitProperty.class,
         SecurityWebIgnoreProperty.class
 })
+@Slf4j
+@Getter
 public class SecurityWebConfiguration {
-    private final Logger log = Logger.getLogger(SecurityWebConfiguration.class.getCanonicalName());
-
-    @Getter
     private final CredentialConsumerConfigurationProperty credentialConsumerConfigurationProperty;
-    @Getter
     private final CredentialConsumerManager credentialConsumerManager;
-    @Getter
     private final SecurityHttpPermitProperty securityHttpPermitProperty;
-    @Getter
     private final SecurityWebIgnoreProperty securityWebIgnoreProperty;
 
     public SecurityWebConfiguration(CredentialConsumerConfigurationProperty credentialConsumerConfigurationProperty, CredentialConsumerManager credentialConsumerManager, SecurityHttpPermitProperty securityHttpPermitProperty, SecurityWebIgnoreProperty securityWebIgnoreProperty) {
@@ -52,7 +47,7 @@ public class SecurityWebConfiguration {
         this.securityHttpPermitProperty = securityHttpPermitProperty;
         this.securityWebIgnoreProperty = securityWebIgnoreProperty;
 
-        if (log.isLoggable(Level.INFO)) log.info("Initialized SecurityConfiguration");
+        if (log.isInfoEnabled()) log.info("Initialized SecurityConfiguration");
     }
 
     @Bean
@@ -87,7 +82,7 @@ public class SecurityWebConfiguration {
                     customizer.anyRequest().authenticated();
                 });
 
-        if (log.isLoggable(Level.INFO)) log.info("Created bean SecurityFilterChain");
+        if (log.isInfoEnabled()) log.info("Created bean SecurityFilterChain");
 
         return httpSecurity.build();
     }
@@ -101,7 +96,7 @@ public class SecurityWebConfiguration {
         WebSecurityCustomizer webSecurityCustomizer =
                 (customizer -> ignore.ifPresent(patternMatcher -> customizer.ignoring().antMatchers(patternMatcher.toArray())));
 
-        if (log.isLoggable(Level.INFO)) log.info("Created bean WebSecurityCustomizer");
+        if (log.isInfoEnabled()) log.info("Created bean WebSecurityCustomizer");
 
         return webSecurityCustomizer;
     }

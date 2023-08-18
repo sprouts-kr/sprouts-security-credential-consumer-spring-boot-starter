@@ -3,25 +3,22 @@ package kr.sprouts.autoconfigure.security.credential.configurations;
 import kr.sprouts.autoconfigure.security.credential.consumers.CredentialConsumerManager;
 import kr.sprouts.autoconfigure.security.credential.properties.CredentialConsumerConfigurationProperty;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 @Configuration
 @ComponentScan(basePackageClasses = { CredentialConsumerManager.class })
 @EnableConfigurationProperties(value = { CredentialConsumerConfigurationProperty.class })
+@Slf4j
+@Getter
 public class CredentialConsumerConfiguration {
-    private final Logger log = Logger.getLogger(CredentialConsumerConfiguration.class.getCanonicalName());
-
-    @Getter
     private final CredentialConsumerConfigurationProperty credentialConsumerConfigurationProperty;
 
     public CredentialConsumerConfiguration(CredentialConsumerConfigurationProperty credentialConsumerConfigurationProperty) {
         this.credentialConsumerConfigurationProperty = credentialConsumerConfigurationProperty;
 
-        if (log.isLoggable(Level.INFO)) log.info("Initialized CredentialConsumerConfiguration");
+        if (log.isInfoEnabled()) log.info("Initialized CredentialConsumerConfiguration");
     }
 }

@@ -13,18 +13,18 @@ import kr.sprouts.security.credential.CredentialConsumerSpec;
 import kr.sprouts.security.credential.CredentialHeaderSpec;
 import kr.sprouts.security.credential.CredentialProvider;
 import kr.sprouts.security.credential.Principal;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@Slf4j
 class CredentialConsumerConfigurationTest {
-    Logger log = Logger.getLogger(CredentialConsumerConfigurationTest.class.getCanonicalName());
     private final ApplicationContextRunner applicationContextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(
                     CredentialConsumerConfiguration.class,

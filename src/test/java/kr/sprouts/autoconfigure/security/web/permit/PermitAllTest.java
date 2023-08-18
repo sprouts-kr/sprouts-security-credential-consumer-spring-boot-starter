@@ -3,6 +3,7 @@ package kr.sprouts.autoconfigure.security.web.permit;
 import kr.sprouts.autoconfigure.security.credential.configurations.CredentialConsumerConfiguration;
 import kr.sprouts.autoconfigure.security.web.application.mock.MockPermitAllTestController;
 import kr.sprouts.autoconfigure.security.web.configurations.SecurityWebConfiguration;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,8 +16,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
-import java.util.logging.Logger;
-
 @ActiveProfiles(value = "test")
 @AutoConfigureMockMvc
 @SpringBootTest(classes = {
@@ -24,8 +23,8 @@ import java.util.logging.Logger;
         SecurityWebConfiguration.class,
         MockPermitAllTestController.class
 })
+@Slf4j
 class PermitAllTest {
-    private Logger log = Logger.getLogger(PermitAllTest.class.getCanonicalName());
     private static final String REQUEST_URI = "/mock/permit-all";
     private static final String BODY = "permitAll";
 

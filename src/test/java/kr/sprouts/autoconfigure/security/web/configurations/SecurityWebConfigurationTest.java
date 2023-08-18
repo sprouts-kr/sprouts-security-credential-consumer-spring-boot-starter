@@ -4,6 +4,7 @@ import kr.sprouts.autoconfigure.security.credential.configurations.CredentialCon
 import kr.sprouts.autoconfigure.security.credential.properties.CredentialConsumerConfigurationProperty;
 import kr.sprouts.autoconfigure.security.web.properties.SecurityHttpPermitProperty;
 import kr.sprouts.autoconfigure.security.web.properties.SecurityWebIgnoreProperty;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,8 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
-import java.util.logging.Logger;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -25,8 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         CredentialConsumerConfiguration.class,
         SecurityWebConfiguration.class
 })
+@Slf4j
 class SecurityWebConfigurationTest {
-    private Logger log = Logger.getLogger(SecurityWebConfigurationTest.class.getCanonicalName());
     private final WebApplicationContext context;
 
     @MockBean(name = "mvcHandlerMappingIntrospector")
