@@ -1,6 +1,6 @@
-package kr.sprouts.autoconfigure.security.credential.components;
+package kr.sprouts.autoconfigure.security.credential.consumer.components;
 
-import kr.sprouts.autoconfigure.security.credential.properties.CredentialConsumerConfigurationProperty;
+import kr.sprouts.autoconfigure.security.credential.consumer.properties.CredentialConsumerConfigurationProperty;
 import kr.sprouts.framework.library.security.credential.CredentialConsumer;
 import kr.sprouts.framework.library.security.credential.CredentialConsumerSpec;
 import lombok.extern.slf4j.Slf4j;

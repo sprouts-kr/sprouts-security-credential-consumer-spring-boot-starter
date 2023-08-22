@@ -1,7 +1,7 @@
 package kr.sprouts.autoconfigure.security.web.components;
 
-import kr.sprouts.autoconfigure.security.credential.components.CredentialConsumerManager;
-import kr.sprouts.autoconfigure.security.credential.properties.CredentialConsumerConfigurationProperty;
+import kr.sprouts.autoconfigure.security.credential.consumer.components.CredentialConsumerManager;
+import kr.sprouts.autoconfigure.security.credential.consumer.properties.CredentialConsumerConfigurationProperty;
 import kr.sprouts.framework.library.security.credential.Credential;
 import kr.sprouts.framework.library.security.credential.CredentialConsumer;
 import kr.sprouts.framework.library.security.credential.CredentialHeaderSpec;

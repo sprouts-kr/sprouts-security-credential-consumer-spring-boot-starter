@@ -1,8 +1,8 @@
-package kr.sprouts.autoconfigure.security.credential;
+package kr.sprouts.autoconfigure.security.credential.consumer;
 
-import kr.sprouts.autoconfigure.security.credential.application.mock.CredentialTestController;
-import kr.sprouts.autoconfigure.security.credential.configurations.CredentialConsumerConfiguration;
-import kr.sprouts.autoconfigure.security.credential.properties.CredentialConsumerConfigurationProperty;
+import kr.sprouts.autoconfigure.security.credential.consumer.application.mock.CredentialTestController;
+import kr.sprouts.autoconfigure.security.credential.consumer.configurations.CredentialConsumerConfiguration;
+import kr.sprouts.autoconfigure.security.credential.consumer.properties.CredentialConsumerConfigurationProperty;
 import kr.sprouts.autoconfigure.security.web.configurations.SecurityWebConfiguration;
 import kr.sprouts.framework.autoconfigure.security.credential.provider.components.ApiKeyCredentialProvider;
 import kr.sprouts.framework.autoconfigure.security.credential.provider.components.ApiKeySubject;

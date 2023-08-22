@@ -1,4 +1,4 @@
-package kr.sprouts.autoconfigure.security.credential.components;
+package kr.sprouts.autoconfigure.security.credential.consumer.components;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

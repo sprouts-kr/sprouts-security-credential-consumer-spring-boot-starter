@@ -1,7 +1,7 @@
-package kr.sprouts.autoconfigure.security.credential.configurations;
+package kr.sprouts.autoconfigure.security.credential.consumer.configurations;
 
-import kr.sprouts.autoconfigure.security.credential.components.CredentialConsumerManager;
-import kr.sprouts.autoconfigure.security.credential.properties.CredentialConsumerConfigurationProperty;
+import kr.sprouts.autoconfigure.security.credential.consumer.components.CredentialConsumerManager;
+import kr.sprouts.autoconfigure.security.credential.consumer.properties.CredentialConsumerConfigurationProperty;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

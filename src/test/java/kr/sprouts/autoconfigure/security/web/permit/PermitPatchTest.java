@@ -1,6 +1,6 @@
 package kr.sprouts.autoconfigure.security.web.permit;
 
-import kr.sprouts.autoconfigure.security.credential.configurations.CredentialConsumerConfiguration;
+import kr.sprouts.autoconfigure.security.credential.consumer.configurations.CredentialConsumerConfiguration;
 import kr.sprouts.autoconfigure.security.web.application.mock.MockPermitPatchTestController;
 import kr.sprouts.autoconfigure.security.web.configurations.SecurityWebConfiguration;
 import lombok.extern.slf4j.Slf4j;

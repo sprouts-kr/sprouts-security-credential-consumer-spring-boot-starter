@@ -1,4 +1,4 @@
-package kr.sprouts.autoconfigure.security.credential.application.mock;
+package kr.sprouts.autoconfigure.security.credential.consumer.application.mock;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
