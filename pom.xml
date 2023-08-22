@@ -8,7 +8,7 @@
 		<version>2.7.14</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>kr.sprouts.autoconfigure</groupId>
+	<groupId>kr.sprouts.framework.autoconfigure</groupId>
 	<artifactId>sprouts-security-credential-consumer-spring-boot-starter</artifactId>
 	<version>0.0.3-SNAPSHOT</version>
 	<name>sprouts-security-credential-consumer-spring-boot-starter</name>
