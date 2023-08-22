@@ -8,7 +8,7 @@
 		<version>2.7.14</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>kr.sprouts.autoconfigure</groupId>
+	<groupId>kr.sprouts.framework.autoconfigure</groupId>
 	<artifactId>sprouts-security-credential-consumer-spring-boot-starter</artifactId>
 	<version>0.0.3-SNAPSHOT</version>
 	<name>sprouts-security-credential-consumer-spring-boot-starter</name>
@@ -16,17 +16,17 @@
 		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 		<java.version>11</java.version>
 		<!-- dependency -->
-		<sprouts.security.credential.version>0.0.3</sprouts.security.credential.version>
+		<sprouts.security.credential.version>0.0.5</sprouts.security.credential.version>
 		<!-- plugin -->
 		<build.helper.maven.plugin.version>3.4.0</build.helper.maven.plugin.version>
 		<versions.maven.plugin.version>2.16.0</versions.maven.plugin.version>
 		<!-- test -->
-		<sprouts.security.credential.provider.version>0.0.2</sprouts.security.credential.provider.version>
+		<sprouts.security.credential.provider.version>0.0.3</sprouts.security.credential.provider.version>
 	</properties>
 	<repositories>
 		<!-- personal repository -->
 		<repository>
-			<id>nexus3-maven-public</id>
+			<id>personal-public</id>
 			<url>https://nexus.sprouts.kr/repository/maven/</url>
 		</repository>
 	</repositories>
@@ -65,9 +65,9 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 
-		<!-- sprouts.kr -->
+		<!-- security-credential -->
 		<dependency>
-			<groupId>kr.sprouts.security.credential</groupId>
+			<groupId>kr.sprouts.framework.library</groupId>
 			<artifactId>sprouts-security-credential</artifactId>
 			<version>${sprouts.security.credential.version}</version>
 		</dependency>
@@ -88,7 +88,7 @@
 
 		<!-- sprouts.kr (for test) -->
 		<dependency>
-			<groupId>kr.sprouts.autoconfigure</groupId>
+			<groupId>kr.sprouts.framework.autoconfigure</groupId>
 			<artifactId>sprouts-security-credential-provider-spring-boot-starter</artifactId>
 			<version>${sprouts.security.credential.provider.version}</version>
 			<scope>test</scope>
