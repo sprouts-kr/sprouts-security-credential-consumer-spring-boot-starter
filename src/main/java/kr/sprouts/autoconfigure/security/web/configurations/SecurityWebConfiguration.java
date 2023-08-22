@@ -3,7 +3,7 @@ package kr.sprouts.autoconfigure.security.web.configurations;
 import kr.sprouts.autoconfigure.security.credential.configurations.CredentialConsumerConfiguration;
 import kr.sprouts.autoconfigure.security.credential.consumers.CredentialConsumerManager;
 import kr.sprouts.autoconfigure.security.credential.properties.CredentialConsumerConfigurationProperty;
-import kr.sprouts.autoconfigure.security.web.filer.CredentialConsumeFilter;
+import kr.sprouts.autoconfigure.security.web.components.CredentialConsumeFilter;
 import kr.sprouts.autoconfigure.security.web.properties.PatternMatcher;
 import kr.sprouts.autoconfigure.security.web.properties.SecurityHttpPermitProperty;
 import kr.sprouts.autoconfigure.security.web.properties.SecurityWebIgnoreProperty;

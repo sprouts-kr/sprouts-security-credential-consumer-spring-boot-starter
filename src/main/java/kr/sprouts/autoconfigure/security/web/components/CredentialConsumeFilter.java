@@ -1,4 +1,4 @@
-package kr.sprouts.autoconfigure.security.web.filer;
+package kr.sprouts.autoconfigure.security.web.components;
 
 import kr.sprouts.autoconfigure.security.credential.consumers.CredentialConsumerManager;
 import kr.sprouts.autoconfigure.security.credential.properties.CredentialConsumerConfigurationProperty;

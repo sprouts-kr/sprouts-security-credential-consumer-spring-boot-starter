@@ -1,4 +1,4 @@
-package kr.sprouts.autoconfigure.security.web.filer;
+package kr.sprouts.autoconfigure.security.web.components;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
