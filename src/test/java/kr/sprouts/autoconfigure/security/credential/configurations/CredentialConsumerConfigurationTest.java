@@ -1,6 +1,6 @@
 package kr.sprouts.autoconfigure.security.credential.configurations;
 
-import kr.sprouts.autoconfigure.security.credential.consumers.CredentialConsumerManager;
+import kr.sprouts.autoconfigure.security.credential.components.CredentialConsumerManager;
 import kr.sprouts.autoconfigure.security.credential.properties.CredentialConsumerConfigurationProperty;
 import kr.sprouts.framework.autoconfigure.security.credential.provider.components.ApiKeyCredentialProvider;
 import kr.sprouts.framework.autoconfigure.security.credential.provider.components.ApiKeySubject;
