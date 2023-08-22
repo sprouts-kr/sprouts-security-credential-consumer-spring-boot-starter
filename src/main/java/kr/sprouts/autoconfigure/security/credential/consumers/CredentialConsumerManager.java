@@ -1,8 +1,8 @@
 package kr.sprouts.autoconfigure.security.credential.consumers;
 
 import kr.sprouts.autoconfigure.security.credential.properties.CredentialConsumerConfigurationProperty;
-import kr.sprouts.security.credential.CredentialConsumer;
-import kr.sprouts.security.credential.CredentialConsumerSpec;
+import kr.sprouts.framework.library.security.credential.CredentialConsumer;
+import kr.sprouts.framework.library.security.credential.CredentialConsumerSpec;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package kr.sprouts.autoconfigure.security.credential.consumers;
 
-import kr.sprouts.security.credential.Subject;
+import kr.sprouts.framework.library.security.credential.Subject;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -2,10 +2,10 @@ package kr.sprouts.autoconfigure.security.web.filer;
 
 import kr.sprouts.autoconfigure.security.credential.consumers.CredentialConsumerManager;
 import kr.sprouts.autoconfigure.security.credential.properties.CredentialConsumerConfigurationProperty;
-import kr.sprouts.security.credential.Credential;
-import kr.sprouts.security.credential.CredentialConsumer;
-import kr.sprouts.security.credential.CredentialHeaderSpec;
-import kr.sprouts.security.credential.Principal;
+import kr.sprouts.framework.library.security.credential.Credential;
+import kr.sprouts.framework.library.security.credential.CredentialConsumer;
+import kr.sprouts.framework.library.security.credential.CredentialHeaderSpec;
+import kr.sprouts.framework.library.security.credential.Principal;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
