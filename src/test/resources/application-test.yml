@@ -26,9 +26,9 @@ sprouts:
         - /mock/ignore/**
     credential:
       header:
-        provider-header-name: "Authorization-Provider"
-        consumer-header-name: "Authorization-Consumer"
-        value-header-name: "Authorization"
+        name: "Authorization"
+        prefix: "Bearer"
+        codec: "BASE64_URL"
       providers:
         - id: "98c73526-7b15-4e0c-aacd-a47816efaedc"
           name: "Provider #1"
