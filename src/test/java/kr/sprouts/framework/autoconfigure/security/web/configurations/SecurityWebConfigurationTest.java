@@ -55,9 +55,9 @@ class SecurityWebConfigurationTest {
         assertNotNull(securityWebIgnoreProperty);
 
         // credential header
-        assertEquals("Authorization-Provider", credentialConsumerConfigurationProperty.getHeader().getProviderHeaderName());
-        assertEquals("Authorization-Consumer", credentialConsumerConfigurationProperty.getHeader().getConsumerHeaderName());
-        assertEquals("Authorization", credentialConsumerConfigurationProperty.getHeader().getValueHeaderName());
+        assertEquals("Authorization", credentialConsumerConfigurationProperty.getHeader().getName());
+        assertEquals("Bearer", credentialConsumerConfigurationProperty.getHeader().getPrefix());
+        assertEquals("BASE64_URL", credentialConsumerConfigurationProperty.getHeader().getCodec());
 
         // size of credential consumers
         assertEquals(3, credentialConsumerConfigurationProperty.getConsumers().size());

@@ -13,6 +13,7 @@ import kr.sprouts.framework.autoconfigure.security.web.configurations.SecurityWe
 import kr.sprouts.framework.library.security.credential.Credential;
 import kr.sprouts.framework.library.security.credential.CredentialHeaderSpec;
 import kr.sprouts.framework.library.security.credential.CredentialProvider;
+import kr.sprouts.framework.library.security.credential.codec.CodecType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.util.SerializationUtils;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -42,14 +43,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 })
 @Slf4j
 class CredentialTest {
-    private static final String SEPARATOR_CHARS = ",";
     private static final String BODY = "credential";
 
     @MockBean(name = "mvcHandlerMappingIntrospector")
     private HandlerMappingIntrospector mvcHandlerMappingIntrospector;
     private final MockMvc mockMvc;
     private final CredentialProviderManager credentialProviderManager;
-
     private final CredentialHeaderSpec credentialHeaderSpec;
 
     @Autowired
@@ -61,9 +60,8 @@ class CredentialTest {
 
     @Test
     void requestWithValidCredential() throws Exception {
-        String providerHeaderName = credentialHeaderSpec.getProviderHeaderName();
-        String consumerHeaderName = credentialHeaderSpec.getConsumerHeaderName();
-        String valueHeaderName = credentialHeaderSpec.getValueHeaderName();
+        String authorizationHeader = credentialHeaderSpec.getName();
+        String authorizationPrefix = credentialHeaderSpec.getPrefix();
 
         UUID memberId = UUID.randomUUID();
         Long validityInMinutes = 60L;
@@ -77,13 +75,14 @@ class CredentialTest {
                 credential = ((BearerTokenCredentialProvider) credentialProvider).provide(BearerTokenSubject.of(memberId, validityInMinutes));
             }
 
-            assertNotNull(credential);
+            byte[] serializedCredential = SerializationUtils.serialize(credential);
+            String encodedCredential = CodecType.BASE64_URL.getCodecSupplier().get().encodeToString(serializedCredential);
+
+            assertNotNull(encodedCredential);
 
             mockMvc.perform(MockMvcRequestBuilders
                             .request(HttpMethod.GET, "/mock/credential")
-                            .header(providerHeaderName, credential.getProviderId())
-                            .header(consumerHeaderName, credential.getConsumerIds().stream().map(UUID::toString).collect(Collectors.joining(SEPARATOR_CHARS)))
-                            .header(valueHeaderName, credential.getValue()))
+                            .header(authorizationHeader, String.format("%s %s", authorizationPrefix, encodedCredential)))
                     .andExpect(MockMvcResultMatchers.status().isOk())
                     .andExpect(MockMvcResultMatchers.content().string(BODY))
             ;
@@ -92,9 +91,8 @@ class CredentialTest {
 
     @Test
     void requestWithInvalidCredential() throws Exception {
-        String providerHeaderName = credentialHeaderSpec.getProviderHeaderName();
-        String consumerHeaderName = credentialHeaderSpec.getConsumerHeaderName();
-        String valueHeaderName = credentialHeaderSpec.getValueHeaderName();
+        String authorizationHeader = credentialHeaderSpec.getName();
+        String authorizationPrefix = credentialHeaderSpec.getPrefix();
 
         UUID memberId = UUID.randomUUID();
         Long validityInMinutes = 60L;
@@ -108,13 +106,15 @@ class CredentialTest {
                 credential = ((BearerTokenCredentialProvider) credentialProvider).provide(BearerTokenSubject.of(memberId, validityInMinutes));
             }
 
-            assertNotNull(credential);
+            byte[] serializedCredential = SerializationUtils.serialize(credential);
+            String encodedCredential = CodecType.BASE64_URL.getCodecSupplier().get().encodeToString(serializedCredential);
+
+            assertNotNull(encodedCredential);
+            log.info(encodedCredential);
 
             mockMvc.perform(MockMvcRequestBuilders
                             .request(HttpMethod.GET, "/mock/credential")
-                            .header(providerHeaderName, credential.getProviderId())
-                            .header(consumerHeaderName, credential.getConsumerIds().stream().map(UUID::toString).collect(Collectors.joining(SEPARATOR_CHARS)))
-                            .header(valueHeaderName, "invalid credential value."))
+                            .header(authorizationHeader, String.format("%s %s", authorizationPrefix, "Invalid credential")))
                     .andExpect(MockMvcResultMatchers.status().isForbidden());
         }
     }

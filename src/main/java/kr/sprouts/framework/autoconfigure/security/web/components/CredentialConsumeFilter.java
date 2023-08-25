@@ -6,9 +6,13 @@ import kr.sprouts.framework.library.security.credential.Credential;
 import kr.sprouts.framework.library.security.credential.CredentialConsumer;
 import kr.sprouts.framework.library.security.credential.CredentialHeaderSpec;
 import kr.sprouts.framework.library.security.credential.Principal;
+import kr.sprouts.framework.library.security.credential.codec.Codec;
+import kr.sprouts.framework.library.security.credential.codec.CodecType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,20 +26,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
+@Slf4j
 public class CredentialConsumeFilter extends OncePerRequestFilter {
-    private final Logger log = Logger.getLogger(CredentialConsumeFilter.class.getCanonicalName());
     private final CredentialHeaderSpec credentialHeaderSpec;
     private final CredentialConsumerManager credentialConsumerManager;
-    private static final String SEPARATOR_CHARS = ",";
+    private final Codec codec;
 
     public CredentialConsumeFilter(CredentialConsumerConfigurationProperty credentialConsumerConfigurationProperty, CredentialConsumerManager credentialConsumerManager) {
         this.credentialConsumerManager = credentialConsumerManager;
@@ -45,7 +44,13 @@ public class CredentialConsumeFilter extends OncePerRequestFilter {
             throw new InitializeCredentialConsumeFilterException();
         }
 
-        if (log.isLoggable(Level.INFO)) log.info("Created filter CredentialConsumeFilter");
+        this.codec = CodecType.fromName(this.credentialHeaderSpec.getCodec()).getCodecSupplier().get();
+
+        if (this.codec == null) {
+            throw new InitializeCredentialConsumeFilterException();
+        }
+
+        if (log.isInfoEnabled()) log.info("Created filter CredentialConsumeFilter");
     }
 
     @Override
@@ -71,29 +76,30 @@ public class CredentialConsumeFilter extends OncePerRequestFilter {
 
     private ConsumeResult consumeRequest(HttpServletRequest request) {
         try {
-            String providerHeaderName = credentialHeaderSpec.getProviderHeaderName();
-            String consumerHeaderName = credentialHeaderSpec.getConsumerHeaderName();
-            String valueHeaderName = credentialHeaderSpec.getValueHeaderName();
+            String authorizationHeaderName = credentialHeaderSpec.getName();
+            String authorizationPrefix = credentialHeaderSpec.getPrefix();
 
-            if (StringUtils.isEmpty(providerHeaderName) || StringUtils.isEmpty(consumerHeaderName) || StringUtils.isEmpty(valueHeaderName)) {
+            if (StringUtils.isEmpty(authorizationHeaderName) || StringUtils.isEmpty(authorizationPrefix)) {
                 return ConsumeResult.failed();
             }
 
-            String providerHeader = request.getHeader(providerHeaderName);
-            String consumerHeader = request.getHeader(consumerHeaderName);
-            String valueHeader = request.getHeader(valueHeaderName);
+            String authorizationValue = request.getHeader(authorizationHeaderName);
 
-            if (StringUtils.isEmpty(providerHeader) || StringUtils.isEmpty(consumerHeader) || StringUtils.isEmpty(valueHeader)) {
+            if (StringUtils.isEmpty(authorizationValue)
+                    || Boolean.FALSE.equals(authorizationValue.startsWith(authorizationPrefix))
+                    || authorizationValue.trim().length() <= authorizationPrefix.length() ) {
                 return ConsumeResult.failed();
             }
 
-            UUID providerId = UUID.fromString(request.getHeader(providerHeaderName));
-            List<UUID> consumerIds = Arrays.stream(StringUtils.split(request.getHeader(consumerHeaderName), SEPARATOR_CHARS))
-                    .map(consumerIdString -> UUID.fromString(StringUtils.trim(consumerIdString)))
-                    .collect(Collectors.toList());
-            String value = request.getHeader(valueHeaderName);
+            Object credentialObject = SerializationUtils.deserialize(
+                    codec.decode(authorizationValue.substring(authorizationPrefix.length()).trim())
+            );
 
-            Credential credential = Credential.of(providerId, consumerIds, value);
+            if (Boolean.FALSE.equals(credentialObject instanceof Credential)) {
+                return ConsumeResult.failed();
+            }
+
+            Credential credential = (Credential) credentialObject;
 
             AtomicReference<CredentialConsumer<?>> consumer = new AtomicReference<>();
 
