@@ -187,7 +187,7 @@ class CredentialConsumerConfigurationTest {
 
                 assertNotNull(credential);
 
-                CredentialConsumer<?> consumer = context.getBean(CredentialConsumerManager.class).get(credential.getConsumerIds().stream().findFirst().orElseThrow()).orElseThrow();
+                CredentialConsumer<?> consumer = context.getBean(CredentialConsumerManager.class).getConsumer(credential.getConsumerIds().stream().findFirst().orElseThrow()).orElseThrow();
 
                 Principal<?> principal = consumer.consume(credential);
 
