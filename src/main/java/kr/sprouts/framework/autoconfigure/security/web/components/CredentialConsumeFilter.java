@@ -104,7 +104,7 @@ public class CredentialConsumeFilter extends OncePerRequestFilter {
             AtomicReference<CredentialConsumer<?>> consumer = new AtomicReference<>();
 
             for (UUID targetConsumer: credential.getConsumerIds()) {
-                credentialConsumerManager.get(targetConsumer).ifPresent(consumer::set);
+                credentialConsumerManager.getConsumer(targetConsumer).ifPresent(consumer::set);
 
                 if (consumer.get() != null) break;
             }

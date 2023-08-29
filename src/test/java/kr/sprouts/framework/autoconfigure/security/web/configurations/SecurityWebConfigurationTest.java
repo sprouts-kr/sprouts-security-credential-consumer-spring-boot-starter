@@ -60,7 +60,7 @@ class SecurityWebConfigurationTest {
         assertEquals("BASE64_URL", credentialConsumerConfigurationProperty.getHeader().getCodec());
 
         // size of credential consumers
-        assertEquals(3, credentialConsumerConfigurationProperty.getConsumers().size());
+        assertEquals(2, credentialConsumerConfigurationProperty.getConsumers().size());
 
         // size of http authorize request patterns
         assertEquals(1, securityHttpPermitProperty.getPermitAll().getPatterns().size());

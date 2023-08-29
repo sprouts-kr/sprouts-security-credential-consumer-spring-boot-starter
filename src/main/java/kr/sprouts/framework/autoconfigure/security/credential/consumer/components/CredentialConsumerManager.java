@@ -41,11 +41,11 @@ public class CredentialConsumerManager {
         }
     }
 
-    public Optional<Collection<CredentialConsumer<?>>> getValues() {
-        return Optional.of(credentialConsumers.values());
+    public Collection<CredentialConsumer<?>> getConsumers() {
+        return credentialConsumers.values();
     }
 
-    public Optional<CredentialConsumer<?>> get(UUID consumerId) {
-        return Optional.of(credentialConsumers.get(consumerId));
+    public Optional<CredentialConsumer<?>> getConsumer(UUID consumerId) {
+        return Optional.ofNullable(credentialConsumers.get(consumerId));
     }
 }

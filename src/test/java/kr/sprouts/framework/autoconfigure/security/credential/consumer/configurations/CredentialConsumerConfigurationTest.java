@@ -176,7 +176,7 @@ class CredentialConsumerConfigurationTest {
             UUID memberId = UUID.randomUUID();
             Long validityInMinutes = 60L;
 
-            for (CredentialProvider<?> provider : context.getBean(CredentialProviderManager.class).getValues().orElseThrow()) {
+            for (CredentialProvider<?> provider : context.getBean(CredentialProviderManager.class).getProviders()) {
                 Credential credential = null;
 
                 if (provider instanceof ApiKeyCredentialProvider) {
@@ -187,7 +187,7 @@ class CredentialConsumerConfigurationTest {
 
                 assertNotNull(credential);
 
-                CredentialConsumer<?> consumer = context.getBean(CredentialConsumerManager.class).get(credential.getConsumerIds().stream().findFirst().orElseThrow()).orElseThrow();
+                CredentialConsumer<?> consumer = context.getBean(CredentialConsumerManager.class).getConsumer(credential.getConsumerIds().stream().findFirst().orElseThrow()).orElseThrow();
 
                 Principal<?> principal = consumer.consume(credential);
 
