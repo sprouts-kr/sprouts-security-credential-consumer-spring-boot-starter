@@ -66,7 +66,7 @@ class CredentialTest {
         UUID memberId = UUID.randomUUID();
         Long validityInMinutes = 60L;
 
-        for(CredentialProvider<?> credentialProvider : credentialProviderManager.getValues().orElseThrow()) {
+        for(CredentialProvider<?> credentialProvider : credentialProviderManager.getProviders()) {
             Credential credential = null;
 
             if (credentialProvider instanceof ApiKeyCredentialProvider) {
@@ -97,7 +97,7 @@ class CredentialTest {
         UUID memberId = UUID.randomUUID();
         Long validityInMinutes = 60L;
 
-        for(CredentialProvider<?> credentialProvider : credentialProviderManager.getValues().orElseThrow()) {
+        for(CredentialProvider<?> credentialProvider : credentialProviderManager.getProviders()) {
             Credential credential = null;
 
             if (credentialProvider instanceof ApiKeyCredentialProvider) {
@@ -110,7 +110,6 @@ class CredentialTest {
             String encodedCredential = CodecType.BASE64_URL.getCodecSupplier().get().encodeToString(serializedCredential);
 
             assertNotNull(encodedCredential);
-            log.info(encodedCredential);
 
             mockMvc.perform(MockMvcRequestBuilders
                             .request(HttpMethod.GET, "/mock/credential")

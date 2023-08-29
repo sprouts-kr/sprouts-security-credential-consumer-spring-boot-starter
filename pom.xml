@@ -21,7 +21,7 @@
 		<build.helper.maven.plugin.version>3.4.0</build.helper.maven.plugin.version>
 		<versions.maven.plugin.version>2.16.0</versions.maven.plugin.version>
 		<!-- test -->
-		<sprouts.security.credential.provider.version>0.0.4</sprouts.security.credential.provider.version>
+		<sprouts.security.credential.provider.version>0.0.5-SNAPSHOT</sprouts.security.credential.provider.version>
 	</properties>
 	<repositories>
 		<!-- personal repository -->

@@ -176,7 +176,7 @@ class CredentialConsumerConfigurationTest {
             UUID memberId = UUID.randomUUID();
             Long validityInMinutes = 60L;
 
-            for (CredentialProvider<?> provider : context.getBean(CredentialProviderManager.class).getValues().orElseThrow()) {
+            for (CredentialProvider<?> provider : context.getBean(CredentialProviderManager.class).getProviders()) {
                 Credential credential = null;
 
                 if (provider instanceof ApiKeyCredentialProvider) {
