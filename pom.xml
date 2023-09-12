@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>kr.sprouts.framework.autoconfigure</groupId>
 	<artifactId>sprouts-security-credential-consumer-spring-boot-starter</artifactId>
-	<version>0.0.5</version>
+	<version>0.0.6-SNAPSHOT</version>
 	<name>sprouts-security-credential-consumer-spring-boot-starter</name>
 	<properties>
 		<java.version>11</java.version>
