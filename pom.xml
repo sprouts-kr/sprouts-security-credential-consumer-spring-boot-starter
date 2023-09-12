@@ -16,7 +16,7 @@
 		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 		<java.version>11</java.version>
 		<!-- dependency -->
-		<sprouts.security.credential.version>0.0.6</sprouts.security.credential.version>
+		<sprouts.security.credential.version>0.0.7</sprouts.security.credential.version>
 		<!-- plugin -->
 		<build.helper.maven.plugin.version>3.4.0</build.helper.maven.plugin.version>
 		<versions.maven.plugin.version>2.16.0</versions.maven.plugin.version>
