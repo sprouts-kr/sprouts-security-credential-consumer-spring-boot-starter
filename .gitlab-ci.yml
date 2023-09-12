@@ -1,9 +1,9 @@
 variables:
-  MAVEN_IMAGE: registry.nexus.sprouts.kr/maven:3.8.6-openjdk-11-slim
+  MAVEN_IMAGE: registry.nexus.devops.sprouts.kr/maven:3.8.6-openjdk-11-slim
 
 include:
   - project: "gitlab-library/gitlab-ci"
-    ref: 0.0.3
+    ref: 0.0.6
     file:
       - 'template/maven-library/prepare.gitlab-ci.yml'
       - 'template/maven-library/build.gitlab-ci.yml'

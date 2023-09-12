@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.14</version>
+		<version>2.7.15</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>kr.sprouts.framework.autoconfigure</groupId>
@@ -13,21 +13,20 @@
 	<version>0.0.5-SNAPSHOT</version>
 	<name>sprouts-security-credential-consumer-spring-boot-starter</name>
 	<properties>
-		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 		<java.version>11</java.version>
 		<!-- dependency -->
-		<sprouts.security.credential.version>0.0.6</sprouts.security.credential.version>
+		<sprouts.security.credential.version>0.0.7</sprouts.security.credential.version>
 		<!-- plugin -->
 		<build.helper.maven.plugin.version>3.4.0</build.helper.maven.plugin.version>
 		<versions.maven.plugin.version>2.16.0</versions.maven.plugin.version>
 		<!-- test -->
-		<sprouts.security.credential.provider.version>0.0.5-SNAPSHOT</sprouts.security.credential.provider.version>
+		<sprouts.security.credential.provider.version>0.0.5</sprouts.security.credential.provider.version>
 	</properties>
 	<repositories>
-		<!-- personal repository -->
+		<!-- personal-repository -->
 		<repository>
-			<id>personal-public</id>
-			<url>https://nexus.sprouts.kr/repository/maven/</url>
+			<id>personal-repository</id>
+			<url>https://nexus.devops.sprouts.kr/repository/maven/</url>
 		</repository>
 	</repositories>
 	<dependencies>
