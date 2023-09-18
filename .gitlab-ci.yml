@@ -1,5 +1,5 @@
 variables:
-  MAVEN_IMAGE: registry.nexus.devops.sprouts.kr/maven:3.8.6-openjdk-11-slim
+  MAVEN_IMAGE: registry.nexus.devops.local/maven:3.8.6-openjdk-11-slim
 
 include:
   - project: "gitlab-library/gitlab-ci"
