@@ -68,7 +68,7 @@ class SecurityWebConfigurationTest {
         assertEquals(1, securityHttpPermitProperty.getPermitPost().getPatterns().size());
         assertEquals(1, securityHttpPermitProperty.getPermitPut().getPatterns().size());
         assertEquals(1, securityHttpPermitProperty.getPermitPatch().getPatterns().size());
-        assertEquals(0, securityHttpPermitProperty.getPermitDelete().getPatterns().size());
+        assertEquals(1, securityHttpPermitProperty.getPermitDelete().getPatterns().size());
 
         // size of web ignore patterns
         assertEquals(1, securityWebIgnoreProperty.getIgnore().getPatterns().size());

@@ -20,7 +20,7 @@ sprouts:
       permit-patch.patterns:
         - /mock/permit-patch
       permit-delete.patterns:
-#        - /mock/permit-delete
+        - /mock/permit-delete
     web:
       ignore.patterns:
         - /mock/ignore/**
