@@ -5,8 +5,8 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.15</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>2.7.17</version>
+		<relativePath/>
 	</parent>
 	<groupId>kr.sprouts.framework.autoconfigure</groupId>
 	<artifactId>sprouts-security-credential-consumer-spring-boot-starter</artifactId>
@@ -15,12 +15,9 @@
 	<properties>
 		<java.version>11</java.version>
 		<!-- dependency -->
-		<sprouts.security.credential.version>0.0.8</sprouts.security.credential.version>
-		<!-- plugin -->
-		<build.helper.maven.plugin.version>3.4.0</build.helper.maven.plugin.version>
-		<versions.maven.plugin.version>2.16.0</versions.maven.plugin.version>
+		<sprouts.security.credential.version>0.0.9</sprouts.security.credential.version>
 		<!-- test -->
-		<sprouts.security.credential.provider.version>0.0.6</sprouts.security.credential.provider.version>
+		<sprouts.security.credential.provider.version>0.0.7</sprouts.security.credential.provider.version>
 	</properties>
 	<repositories>
 		<!-- personal-repository -->
@@ -63,29 +60,25 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
-
 		<!-- security-credential -->
 		<dependency>
 			<groupId>kr.sprouts.framework.library</groupId>
 			<artifactId>sprouts-security-credential</artifactId>
 			<version>${sprouts.security.credential.version}</version>
 		</dependency>
-
 		<!-- lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-
 		<!-- test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- sprouts.kr (for test) -->
+		<!-- sprouts-security-credential-provider-spring-boot-starter -->
 		<dependency>
 			<groupId>kr.sprouts.framework.autoconfigure</groupId>
 			<artifactId>sprouts-security-credential-provider-spring-boot-starter</artifactId>
@@ -102,104 +95,5 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>${build.helper.maven.plugin.version}</version>
-				<executions>
-					<execution>
-						<id>parse-version</id>
-						<goals>
-							<goal>parse-version</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>versions-maven-plugin</artifactId>
-				<version>${versions.maven.plugin.version}</version>
-			</plugin>
-		</plugins>
 	</build>
-	<profiles>
-		<profile>
-			<id>gitlab-package-registry-deploy</id>
-			<distributionManagement>
-				<repository>
-					<id>gitlab-package-registry</id>
-					<!--suppress UnresolvedMavenProperty -->
-					<url>${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/maven/</url>
-				</repository>
-				<snapshotRepository>
-					<id>gitlab-package-registry</id>
-					<!--suppress UnresolvedMavenProperty -->
-					<url>${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/maven/</url>
-				</snapshotRepository>
-			</distributionManagement>
-		</profile>
-		<profile>
-			<id>snapshot-patch</id>
-			<activation>
-				<property>
-					<name>snapshotPatch</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>versions-maven-plugin</artifactId>
-						<version>${versions.maven.plugin.version}</version>
-						<executions>
-							<execution>
-								<goals>
-									<goal>set</goal>
-								</goals>
-								<phase>validate</phase>
-								<configuration>
-									<newVersion>
-										<!--suppress UnresolvedMavenProperty -->
-										${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextIncrementalVersion}-SNAPSHOT
-									</newVersion>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>release-patch</id>
-			<activation>
-				<property>
-					<name>releasePatch</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>versions-maven-plugin</artifactId>
-						<version>${versions.maven.plugin.version}</version>
-						<executions>
-							<execution>
-								<goals>
-									<goal>set</goal>
-								</goals>
-								<phase>validate</phase>
-								<configuration>
-									<newVersion>
-										<!--suppress UnresolvedMavenProperty -->
-										${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
-									</newVersion>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>

@@ -1,21 +1,21 @@
 variables:
-  MAVEN_IMAGE: registry.nexus.devops.local/maven:3.8.6-openjdk-11-slim
+  MAVEN_IMAGE: maven:3.9.5-eclipse-temurin-11
 
 include:
-  - project: "gitlab-library/gitlab-ci"
-    ref: 0.0.7
+  - project: "library/gitlab-ci"
+    ref: 0.1.0
     file:
-      - 'template/maven-library/prepare.gitlab-ci.yml'
-      - 'template/maven-library/build.gitlab-ci.yml'
-      - 'template/maven-library/test.gitlab-ci.yml'
-      - 'template/maven-library/quality.gitlab-ci.yml'
-      - 'template/maven-library/deploy.gitlab-ci.yml'
-      - 'template/maven-library/finish.gitlab-ci.yml'
+      - 'maven-library/common/prepare.gitlab-ci.yml'
+      - 'maven-library/common/maven.compile.gitlab-ci.yml'
+      - 'maven-library/common/maven.test.gitlab-ci.yml'
+      - 'maven-library/common/quality.gitlab-ci.yml'
+      - 'maven-library/common/maven.deploy.gitlab-ci.yml'
+      - 'maven-library/common/finish.gitlab-ci.yml'
 
 stages:
   - prepare
-  - build
-  - test
+  - maven-compile
+  - maven-test
   - quality
-  - deploy
+  - maven-deploy
   - finish
