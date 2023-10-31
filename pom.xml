@@ -12,7 +12,7 @@
   <version>0.1.0-SNAPSHOT</version>
   <name>sprouts-security-credential-consumer-spring-boot-starter</name>
   <properties>
-    <java.version>11</java.version>
+    <java.version>17</java.version>
     <!-- dependency -->
     <sprouts.security.credential.version>0.0.9</sprouts.security.credential.version>
     <!-- test -->
