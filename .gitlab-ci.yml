@@ -1,0 +1,21 @@
+variables:
+  MAVEN_IMAGE: maven:3.9.5-eclipse-temurin-11
+
+include:
+  - project: "library/gitlab-ci"
+    ref: 0.1.0
+    file:
+      - 'maven-library/common/prepare.gitlab-ci.yml'
+      - 'maven-library/common/maven.compile.gitlab-ci.yml'
+      - 'maven-library/common/maven.test.gitlab-ci.yml'
+      - 'maven-library/common/quality.gitlab-ci.yml'
+      - 'maven-library/common/maven.deploy.gitlab-ci.yml'
+      - 'maven-library/common/finish.gitlab-ci.yml'
+
+stages:
+  - prepare
+  - maven-compile
+  - maven-test
+  - quality
+  - maven-deploy
+  - finish
