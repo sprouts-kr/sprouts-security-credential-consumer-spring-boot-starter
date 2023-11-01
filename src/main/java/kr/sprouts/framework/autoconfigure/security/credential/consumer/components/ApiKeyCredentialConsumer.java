@@ -14,7 +14,6 @@ import kr.sprouts.framework.library.security.credential.codec.CodecType;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class ApiKeyCredentialConsumer implements CredentialConsumer<ApiKeySubject> {
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -31,7 +30,7 @@ public class ApiKeyCredentialConsumer implements CredentialConsumer<ApiKeySubjec
         this.codec = CodecType.fromName(codec).getCodecSupplier().get();
         this.cipher = CipherAlgorithm.fromName(algorithm).getCipherSupplier().get();
         this.decryptSecret = this.codec.decode(encodedDecryptSecret);
-        this.validProviderIds = validProviderIds.stream().map(UUID::fromString).collect(Collectors.toList());
+        this.validProviderIds = validProviderIds.stream().map(UUID::fromString).toList();
     }
 
     public static ApiKeyCredentialConsumer of(CredentialConsumerSpec spec) {
@@ -41,7 +40,7 @@ public class ApiKeyCredentialConsumer implements CredentialConsumer<ApiKeySubjec
                 spec.getCodec(),
                 spec.getAlgorithm(),
                 spec.getEncodedSecret(),
-                spec.getValidProviders().stream().map(CredentialConsumerSpec.ValidProvider::getId).collect(Collectors.toList())
+                spec.getValidProviders().stream().map(CredentialConsumerSpec.ValidProvider::getId).toList()
         );
     }
 
