@@ -1,8 +1,5 @@
 package kr.sprouts.framework.autoconfigure.security.credential.consumer.components;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import kr.sprouts.framework.library.security.credential.Credential;
 import kr.sprouts.framework.library.security.credential.CredentialConsumer;
@@ -16,10 +13,8 @@ import kr.sprouts.framework.library.security.credential.jwt.JwtAlgorithm;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class BearerTokenCredentialConsumer implements CredentialConsumer<BearerTokenSubject> {
-    private final ObjectMapper objectMapper = new ObjectMapper();
     private final UUID id;
     private final String name;
     private final Codec codec;
@@ -33,7 +28,7 @@ public class BearerTokenCredentialConsumer implements CredentialConsumer<BearerT
         this.codec = CodecType.fromName(codec).getCodecSupplier().get();
         this.jwt = JwtAlgorithm.fromName(algorithm).getJwtSupplier().get();
         this.decryptSecret = this.codec.decode(encodedDecryptSecret);
-        this.validProviderIds = validProviderIds.stream().map(UUID::fromString).collect(Collectors.toList());
+        this.validProviderIds = validProviderIds.stream().map(UUID::fromString).toList();
     }
 
     public static BearerTokenCredentialConsumer of(CredentialConsumerSpec spec) {
@@ -43,7 +38,7 @@ public class BearerTokenCredentialConsumer implements CredentialConsumer<BearerT
                 spec.getCodec(),
                 spec.getAlgorithm(),
                 spec.getEncodedSecret(),
-                spec.getValidProviders().stream().map(CredentialConsumerSpec.ValidProvider::getId).collect(Collectors.toList())
+                spec.getValidProviders().stream().map(CredentialConsumerSpec.ValidProvider::getId).toList()
         );
     }
 
@@ -59,21 +54,17 @@ public class BearerTokenCredentialConsumer implements CredentialConsumer<BearerT
 
     @Override
     public Principal<BearerTokenSubject> consume(Credential credential) {
-        try {
-            Principal<BearerTokenSubject> principal = principal(jwt.parseClaimsJws(credential.getValue(), decryptSecret));
+        Principal<BearerTokenSubject> principal = principal(jwt.parseClaimsJws(credential.getValue(), decryptSecret));
 
-            if (Boolean.FALSE.equals(isValidProvider(principal.getProviderId()))) throw new InvalidCredentialProviderException();
+        if (Boolean.FALSE.equals(isValidProvider(principal.getProviderId()))) throw new InvalidCredentialProviderException();
 
-            return principal;
-        } catch (JsonProcessingException e) {
-            throw new BearerTokenCredentialConsumeException(e);
-        }
+        return principal;
     }
 
-    private Principal<BearerTokenSubject> principal(Claims claims) throws JsonProcessingException {
+    private Principal<BearerTokenSubject> principal(Claims claims) {
         return Principal.of(
                 UUID.fromString(claims.getIssuer()),
-                objectMapper.readValue(claims.getAudience(), new TypeReference<>() { }),
+                claims.getAudience().stream().map(UUID::fromString).toList(),
                 BearerTokenSubject.of(
                         UUID.fromString(claims.getSubject()),
                         TimeUnit.MINUTES.convert(Math.abs(claims.getExpiration().getTime() - claims.getIssuedAt().getTime()), TimeUnit.MILLISECONDS)

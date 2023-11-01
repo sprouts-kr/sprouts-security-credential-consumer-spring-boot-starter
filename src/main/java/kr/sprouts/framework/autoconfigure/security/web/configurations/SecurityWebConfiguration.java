@@ -18,6 +18,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -58,7 +59,7 @@ public class SecurityWebConfiguration {
         httpSecurity
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions().sameOrigin())
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .sessionManagement(filter -> filter.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         Optional<PatternMatcher> permitAll = Optional.ofNullable(securityHttpPermitProperty.getPermitAll());
@@ -70,16 +71,16 @@ public class SecurityWebConfiguration {
 
         httpSecurity
                 .addFilterBefore(new CredentialConsumeFilter(credentialConsumerConfigurationProperty, credentialConsumerManager), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests(customizer -> {
-                    permitAll.ifPresent(patternMatcher -> customizer.antMatchers(patternMatcher.toArray()).permitAll());
-                    permitGet.ifPresent(patternMatcher -> customizer.antMatchers(HttpMethod.GET, patternMatcher.toArray()).permitAll());
-                    permitPost.ifPresent(patternMatcher -> customizer.antMatchers(HttpMethod.POST, patternMatcher.toArray()).permitAll());
-                    permitPut.ifPresent(patternMatcher -> customizer.antMatchers(HttpMethod.PUT, patternMatcher.toArray()).permitAll());
-                    permitPatch.ifPresent(patternMatcher -> customizer.antMatchers(HttpMethod.PATCH, patternMatcher.toArray()).permitAll());
-                    permitDelete.ifPresent(patternMatcher -> customizer.antMatchers(HttpMethod.DELETE, patternMatcher.toArray()).permitAll());
+                .authorizeHttpRequests(request -> {
+                    permitAll.ifPresent(patternMatcher -> request.requestMatchers(patternMatcher.toArray()).permitAll());
+                    permitGet.ifPresent(patternMatcher -> request.requestMatchers(HttpMethod.GET, patternMatcher.toArray()).permitAll());
+                    permitPost.ifPresent(patternMatcher -> request.requestMatchers(HttpMethod.POST, patternMatcher.toArray()).permitAll());
+                    permitPut.ifPresent(patternMatcher -> request.requestMatchers(HttpMethod.PUT, patternMatcher.toArray()).permitAll());
+                    permitPatch.ifPresent(patternMatcher -> request.requestMatchers(HttpMethod.PATCH, patternMatcher.toArray()).permitAll());
+                    permitDelete.ifPresent(patternMatcher -> request.requestMatchers(HttpMethod.DELETE, patternMatcher.toArray()).permitAll());
 
-                    customizer.requestMatchers(CorsUtils::isPreFlightRequest).permitAll();
-                    customizer.anyRequest().authenticated();
+                    request.requestMatchers(CorsUtils::isPreFlightRequest).permitAll();
+                    request.anyRequest().authenticated();
                 });
 
         if (log.isInfoEnabled()) log.info("Created bean SecurityFilterChain");
@@ -94,7 +95,7 @@ public class SecurityWebConfiguration {
         Optional<PatternMatcher> ignore = Optional.ofNullable(securityWebIgnoreProperty.getIgnore());
 
         WebSecurityCustomizer webSecurityCustomizer =
-                (customizer -> ignore.ifPresent(patternMatcher -> customizer.ignoring().antMatchers(patternMatcher.toArray())));
+                (customizer -> ignore.ifPresent(patternMatcher -> customizer.ignoring().requestMatchers(patternMatcher.toArray())));
 
         if (log.isInfoEnabled()) log.info("Created bean WebSecurityCustomizer");
 
