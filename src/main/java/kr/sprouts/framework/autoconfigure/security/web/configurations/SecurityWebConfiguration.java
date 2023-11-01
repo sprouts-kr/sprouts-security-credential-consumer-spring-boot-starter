@@ -9,10 +9,10 @@ import kr.sprouts.framework.autoconfigure.security.web.properties.SecurityHttpPe
 import kr.sprouts.framework.autoconfigure.security.web.properties.SecurityWebIgnoreProperty;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,7 +29,7 @@ import java.util.Optional;
 @AutoConfigureAfter(value = {
         CredentialConsumerConfiguration.class
 })
-@Configuration
+@AutoConfiguration
 @EnableConfigurationProperties(value = {
         SecurityHttpPermitProperty.class,
         SecurityWebIgnoreProperty.class
