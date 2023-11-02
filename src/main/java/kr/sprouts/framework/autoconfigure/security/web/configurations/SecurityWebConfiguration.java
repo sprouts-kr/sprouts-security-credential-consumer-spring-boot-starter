@@ -22,6 +22,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsUtils;
 
 import java.util.Optional;
@@ -72,7 +73,7 @@ public class SecurityWebConfiguration {
         httpSecurity
                 .addFilterBefore(new CredentialConsumeFilter(credentialConsumerConfigurationProperty, credentialConsumerManager), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> {
-                    permitAll.ifPresent(patternMatcher -> request.requestMatchers(patternMatcher.toArray()).permitAll());
+                    permitAll.ifPresent(patternMatcher -> request.requestMatchers(patternMatcher.getPatterns().stream().map(AntPathRequestMatcher::new).toArray(AntPathRequestMatcher[]::new)).permitAll());
                     permitGet.ifPresent(patternMatcher -> request.requestMatchers(HttpMethod.GET, patternMatcher.toArray()).permitAll());
                     permitPost.ifPresent(patternMatcher -> request.requestMatchers(HttpMethod.POST, patternMatcher.toArray()).permitAll());
                     permitPut.ifPresent(patternMatcher -> request.requestMatchers(HttpMethod.PUT, patternMatcher.toArray()).permitAll());
