@@ -73,12 +73,35 @@ public class SecurityWebConfiguration {
         httpSecurity
                 .addFilterBefore(new CredentialConsumeFilter(credentialConsumerConfigurationProperty, credentialConsumerManager), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> {
-                    permitAll.ifPresent(patternMatcher -> request.requestMatchers(patternMatcher.getPatterns().stream().map(AntPathRequestMatcher::new).toArray(AntPathRequestMatcher[]::new)).permitAll());
-                    permitGet.ifPresent(patternMatcher -> request.requestMatchers(HttpMethod.GET, patternMatcher.toArray()).permitAll());
-                    permitPost.ifPresent(patternMatcher -> request.requestMatchers(HttpMethod.POST, patternMatcher.toArray()).permitAll());
-                    permitPut.ifPresent(patternMatcher -> request.requestMatchers(HttpMethod.PUT, patternMatcher.toArray()).permitAll());
-                    permitPatch.ifPresent(patternMatcher -> request.requestMatchers(HttpMethod.PATCH, patternMatcher.toArray()).permitAll());
-                    permitDelete.ifPresent(patternMatcher -> request.requestMatchers(HttpMethod.DELETE, patternMatcher.toArray()).permitAll());
+                    permitAll.ifPresent(patternMatcher -> request.requestMatchers(patternMatcher.getPatterns().stream()
+                            .map(AntPathRequestMatcher::antMatcher)
+                            .toArray(AntPathRequestMatcher[]::new)
+                    ).permitAll());
+
+                    permitGet.ifPresent(patternMatcher -> request.requestMatchers(patternMatcher.getPatterns().stream()
+                            .map(pattern -> AntPathRequestMatcher.antMatcher(HttpMethod.GET, pattern))
+                            .toArray(AntPathRequestMatcher[]::new)
+                    ).permitAll());
+
+                    permitPost.ifPresent(patternMatcher -> request.requestMatchers(patternMatcher.getPatterns().stream()
+                            .map(pattern -> AntPathRequestMatcher.antMatcher(HttpMethod.POST, pattern))
+                            .toArray(AntPathRequestMatcher[]::new)
+                    ).permitAll());
+
+                    permitPut.ifPresent(patternMatcher -> request.requestMatchers(patternMatcher.getPatterns().stream()
+                            .map(pattern -> AntPathRequestMatcher.antMatcher(HttpMethod.PUT, pattern))
+                            .toArray(AntPathRequestMatcher[]::new)
+                    ).permitAll());
+
+                    permitPatch.ifPresent(patternMatcher -> request.requestMatchers(patternMatcher.getPatterns().stream()
+                            .map(pattern -> AntPathRequestMatcher.antMatcher(HttpMethod.PATCH, pattern))
+                            .toArray(AntPathRequestMatcher[]::new)
+                    ).permitAll());
+
+                    permitDelete.ifPresent(patternMatcher -> request.requestMatchers(patternMatcher.getPatterns().stream()
+                            .map(pattern -> AntPathRequestMatcher.antMatcher(HttpMethod.DELETE, pattern))
+                            .toArray(AntPathRequestMatcher[]::new)
+                    ).permitAll());
 
                     request.requestMatchers(CorsUtils::isPreFlightRequest).permitAll();
                     request.anyRequest().authenticated();
