@@ -74,7 +74,7 @@ public class SecurityWebConfiguration {
                 .addFilterBefore(new CredentialConsumeFilter(credentialConsumerConfigurationProperty, credentialConsumerManager), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> {
                     permitAll.ifPresent(patternMatcher -> request.requestMatchers(patternMatcher.getPatterns().stream()
-                            .map(AntPathRequestMatcher::new)
+                            .map(AntPathRequestMatcher::antMatcher)
                             .toArray(AntPathRequestMatcher[]::new)
                     ).permitAll());
 
